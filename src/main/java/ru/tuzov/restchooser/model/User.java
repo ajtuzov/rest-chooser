@@ -1,8 +1,6 @@
 package ru.tuzov.restchooser.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,15 +24,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.EnumSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email", name = "users_unique_email_idx"))
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@ToString(callSuper = true, exclude = {"password", "chooses"})
+@NoArgsConstructor
+@ToString(callSuper = true)
 public class User extends BaseEntity implements Serializable {
 
     @Column(name = "email", nullable = false)
@@ -44,29 +42,40 @@ public class User extends BaseEntity implements Serializable {
     private String email;
 
     @Column(name = "first_name")
-    @Size(max = 128)
+    @Size(min = 2, max = 128)
     private String firstName;
 
     @Column(name = "last_name")
-    @Size(max = 128)
+    @Size(min = 2, max = 128)
     private String lastName;
 
+    @ToString.Exclude
     @Column(name = "password")
-    @Size(max = 256)
+    @Size(min = 6, max = 32)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), uniqueConstraints =
-                                    @UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}, name = "user_roles_unique"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
+    @ToString.Exclude
     private Set<Choose> chooses;
+
+    public User(Integer id, String email, String firstName, String lastName, String password, Role role, Role... roles) {
+        super(id);
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.roles = EnumSet.of(role, roles);
+    }
 
     public void setEmail(String email) {
         this.email = StringUtils.hasText(email) ? email.toLowerCase() : null;

@@ -25,7 +25,7 @@ public class ChooseController {
 
     private final ChooseRepository chooseRepository;
 
-    @PostMapping("/restaurant/{id}")
+    @PostMapping(path = "/restaurant/{id}")
     public void choose(@AuthenticationPrincipal AuthUser authUser, @PathVariable int id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Not found Restaurant with id=" + id));

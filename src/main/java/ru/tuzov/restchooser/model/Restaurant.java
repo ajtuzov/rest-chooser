@@ -1,7 +1,6 @@
 package ru.tuzov.restchooser.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +23,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true)
 public class Restaurant extends BaseEntity implements Serializable {
 
@@ -41,9 +39,11 @@ public class Restaurant extends BaseEntity implements Serializable {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private Set<Choose> chooses;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Meal> menu;
 }

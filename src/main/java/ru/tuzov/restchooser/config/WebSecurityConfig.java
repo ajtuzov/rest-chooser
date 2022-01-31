@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import ru.tuzov.restchooser.AuthUser;
+import ru.tuzov.restchooser.model.Role;
 import ru.tuzov.restchooser.model.User;
 import ru.tuzov.restchooser.repository.UserRepository;
 
@@ -29,7 +30,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .anyRequest().authenticated()
+                .antMatchers("/api/account/register").anonymous()
+                .antMatchers("/api/account/**").hasRole(Role.USER.name())
+                .antMatchers("/api/choose/**").hasRole(Role.USER.name())
+                .antMatchers("/api/**").hasRole(Role.ADMIN.name())
                 .and().httpBasic()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
