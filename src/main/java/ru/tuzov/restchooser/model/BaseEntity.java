@@ -1,14 +1,13 @@
 package ru.tuzov.restchooser.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.domain.Persistable;
 import org.springframework.data.util.ProxyUtils;
+import ru.tuzov.restchooser.HasId;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -24,7 +23,7 @@ import javax.persistence.MappedSuperclass;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public abstract class BaseEntity implements Persistable<Integer> {
+public abstract class BaseEntity implements HasId {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +32,6 @@ public abstract class BaseEntity implements Persistable<Integer> {
     @Override
     public Integer getId() {
         return id;
-    }
-
-    @JsonIgnore
-    @Override
-    public boolean isNew() {
-        return id == null;
     }
 
     @Override

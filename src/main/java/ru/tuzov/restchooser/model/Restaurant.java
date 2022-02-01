@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +23,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class Restaurant extends BaseEntity implements Serializable {
+public class Restaurant extends BaseEntity {
 
     @Size(min = 2, max = 127)
     @NotBlank

@@ -18,6 +18,9 @@ public class AppConfig {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
     }
 
+    /**
+     * Handling Hibernate lazy-loading
+     */
     @Bean
     public Hibernate5Module hibernate5Module() {
         return new Hibernate5Module();

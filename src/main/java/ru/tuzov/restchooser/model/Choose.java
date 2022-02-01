@@ -1,7 +1,6 @@
 package ru.tuzov.restchooser.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +20,6 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString(callSuper = true)
 public class Choose extends BaseEntity {
 
@@ -39,4 +37,11 @@ public class Choose extends BaseEntity {
 
     @Column(name = "time_of_vote", nullable = false, columnDefinition = "TIME DEFAULT CURRENT_TIME()")
     private LocalTime timeOfChoose;
+
+    public Choose(User user, Restaurant restaurant, LocalDate dateOfChoose, LocalTime timeOfChoose) {
+        this.user = user;
+        this.restaurant = restaurant;
+        this.dateOfChoose = dateOfChoose;
+        this.timeOfChoose = timeOfChoose;
+    }
 }

@@ -19,6 +19,7 @@ import ru.tuzov.restchooser.model.User;
 import ru.tuzov.restchooser.repository.UserRepository;
 import ru.tuzov.restchooser.to.UserTo;
 import ru.tuzov.restchooser.util.UserUtil;
+import ru.tuzov.restchooser.util.exception.NotFoundException;
 
 import java.net.URI;
 
@@ -38,7 +39,8 @@ public class ProfileController {
     @GetMapping
     public User get(@AuthenticationPrincipal AuthUser authUser) {
         log.info("Get logged user {}", authUser);
-        return authUser.getUser();
+        return repository.findById(authUser.getId())
+                .orElseThrow(() -> new NotFoundException("Not found User with id=" + authUser.getId()));
     }
 
     @ResponseStatus(HttpStatus.CREATED)

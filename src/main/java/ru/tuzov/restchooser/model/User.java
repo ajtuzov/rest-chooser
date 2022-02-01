@@ -23,7 +23,6 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -33,7 +32,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class User extends BaseEntity implements Serializable {
+public class User extends BaseEntity {
 
     @Column(name = "email", nullable = false)
     @Email

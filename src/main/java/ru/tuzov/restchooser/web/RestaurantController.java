@@ -1,5 +1,6 @@
 package ru.tuzov.restchooser.web;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +14,12 @@ import ru.tuzov.restchooser.util.exception.NotFoundException;
 import java.util.List;
 
 @Slf4j
+@AllArgsConstructor
 @RestController
 @RequestMapping(path = "/api/restaurant/", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantController {
 
     private final RestaurantRepository repository;
-
-    public RestaurantController(RestaurantRepository repository) {
-        this.repository = repository;
-    }
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
