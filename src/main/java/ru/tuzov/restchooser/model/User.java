@@ -7,7 +7,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -50,7 +49,7 @@ public class User extends BaseEntity {
 
     @ToString.Exclude
     @Column(name = "password")
-    @Size(min = 6, max = 32)
+    @Size(max = 256)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -74,9 +73,5 @@ public class User extends BaseEntity {
         this.lastName = lastName;
         this.password = password;
         this.roles = EnumSet.of(role, roles);
-    }
-
-    public void setEmail(String email) {
-        this.email = StringUtils.hasText(email) ? email.toLowerCase() : null;
     }
 }

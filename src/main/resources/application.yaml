@@ -23,7 +23,7 @@ spring:
     visibility:
       field: any
       getter: none
-      setter: none
+      setter: protected_and_public
       is-getter: none
 
 logging:

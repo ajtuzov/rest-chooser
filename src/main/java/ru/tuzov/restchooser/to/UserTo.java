@@ -1,9 +1,12 @@
 package ru.tuzov.restchooser.to;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
+import ru.tuzov.restchooser.util.JsonDeserializers;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -33,6 +36,7 @@ public class UserTo extends BaseTo implements Serializable {
 
     @NotBlank
     @Size(min = 6, max = 32)
+    @JsonDeserialize(using = JsonDeserializers.PasswordDeserializer.class)
     private String password;
 
     public UserTo(Integer id, String email, String firstName, String lastName, String password) {
@@ -41,5 +45,9 @@ public class UserTo extends BaseTo implements Serializable {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+    }
+
+    public void setEmail(String email) {
+        this.email = StringUtils.hasText(email) ? email.toLowerCase() : null;
     }
 }
