@@ -16,7 +16,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "password")
 public class UserTo extends BaseTo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +35,7 @@ public class UserTo extends BaseTo implements Serializable {
 
     @NotBlank
     @Size(min = 6, max = 32)
+    @ToString.Exclude
     @JsonDeserialize(using = JsonDeserializers.PasswordDeserializer.class)
     private String password;
 
