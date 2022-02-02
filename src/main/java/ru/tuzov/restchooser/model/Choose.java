@@ -24,6 +24,7 @@ import java.time.LocalTime;
 public class Choose extends BaseEntity {
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 

@@ -1,5 +1,6 @@
 package ru.tuzov.restchooser.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,6 +64,7 @@ public class User extends BaseEntity {
     private Set<Role> roles;
 
     @OneToMany(mappedBy = "user")
+    @JsonManagedReference
     @ToString.Exclude
     private Set<Choose> chooses;
 

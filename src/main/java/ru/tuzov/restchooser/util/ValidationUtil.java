@@ -24,4 +24,12 @@ public class ValidationUtil {
             throw new NotFoundException("Not found entity with " + msg);
         }
     }
+
+    public static void assureIdConsistent(HasId bean, int id) {
+        if (bean.isNew()) {
+            bean.setId(id);
+        } else if (bean.id() != id) {
+            throw new IllegalRequestDataException(bean + " must be with id=" + id);
+        }
+    }
 }

@@ -34,7 +34,7 @@ public class UserTo extends BaseTo implements Serializable {
     private String lastName;
 
     @NotBlank
-    @Size(min = 6, max = 32)
+    @Size(max = 256)
     @ToString.Exclude
     @JsonDeserialize(using = JsonDeserializers.PasswordDeserializer.class)
     private String password;

@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,9 +20,12 @@ import ru.tuzov.restchooser.model.User;
 import ru.tuzov.restchooser.repository.UserRepository;
 import ru.tuzov.restchooser.to.UserTo;
 import ru.tuzov.restchooser.util.UserUtil;
+import ru.tuzov.restchooser.util.exception.NotFoundException;
 
+import javax.validation.Valid;
 import java.net.URI;
 
+import static ru.tuzov.restchooser.util.ValidationUtil.assureIdConsistent;
 import static ru.tuzov.restchooser.util.ValidationUtil.checkNew;
 import static ru.tuzov.restchooser.util.ValidationUtil.checkNotFoundWithId;
 
@@ -41,9 +45,17 @@ public class ProfileController {
         return authUser.getUser();
     }
 
+    @GetMapping(path = "/with-chooses")
+    public User getWithChooses(@AuthenticationPrincipal AuthUser authUser) {
+        log.info("Get logged used {} with chooses", authUser);
+        int id = authUser.getId();
+        return repository.findByIdWithChooses(id)
+                .orElseThrow(() -> new NotFoundException("Not found User with id=" + id));
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> register(@RequestBody UserTo userTo) {
+    public ResponseEntity<User> register(@Valid @RequestBody UserTo userTo) {
         log.info("Create user from TO {}", userTo);
         checkNew(userTo);
         User created = repository.save(UserUtil.createNewFromTo(userTo));
@@ -57,5 +69,12 @@ public class ProfileController {
     public void delete(@AuthenticationPrincipal AuthUser authUser) {
         log.info("Delete user {}", authUser);
         checkNotFoundWithId(repository.delete(authUser.getId()) != 0, authUser.getId());
+    }
+
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthUser authUser) {
+        assureIdConsistent(userTo, authUser.getId());
+        repository.save(UserUtil.createNewFromTo(userTo));
     }
 }
